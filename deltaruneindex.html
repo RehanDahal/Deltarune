@@ -1,20 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Deltarune Web Port</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="./css/style.css">
+<meta charset="UTF-8">
+<title>Deltarune Web Port</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+  /* Game CSS */
+  body {
+    margin: 0;
+    padding: 0;
+    background: #77b;
+    font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+    text-align: center;
+  }
+  #container {
+    margin: 30px auto;
+    padding: 20px;
+    background: #ccd url('data:image/gif;base64,REPLACE_BACKBLUE_BASE64') no-repeat top right;
+    border: 2px solid #000;
+    max-width: 900px;
+  }
+  a {
+    font-weight: bold;
+    color: #00f;
+    text-decoration: underline;
+  }
+  a:hover { color: #c00; }
+</style>
+
 </head>
 <body>
-  <div id="container">
-    <h1>Deltarune</h1>
-    <p><a href="./game.html">Launch Game</a></p>
-  </div>
 
-  <!-- Local scripts -->
-  <script src="./js/game.js"></script>
-  <script src="./js/input.js"></script>
-  <script src="./js/other-scripts.js"></script>
+<div id="container">
+  <h1>Deltarune Web Port</h1>
+  <p><a href="#" id="startGame">Launch Game</a></p>
+</div>
+
+<script>
+/* ---- Embedded game JS ---- */
+/* Replace this section with your game.js code */
+document.getElementById('startGame').addEventListener('click', function(e) {
+  e.preventDefault();
+  alert("Game would launch here. Embed your game JS in this <script> block.");
+});
+
+/* If you have multiple JS files (game.js, input.js, etc.), just paste them here one after another. */
+</script>
+
 </body>
 </html>
