@@ -1,44 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Deltarune Web Port</title>
-  <meta name="description" content="Play Deltarune in browser">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  launch()
 
-  <!-- Local CSS -->
-  <link rel="stylesheet" href="./css/style.css">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: #77b;
-      font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  function launch() {
+    try {
+      fetch(
+        'https://cdn.jsdelivr.net/gh/genizy/web-port@1102f068fff0083d2a5ed979ebac6425540d78a5/deltarune/index.html?t=' +
+          Date.now()
+      )
+        .then((response) => response.text())
+        .then((html) => {
+          document.documentElement.innerHTML = html
+
+          document.documentElement.querySelectorAll('script').forEach((oldScript) => {
+            const newScript = document.createElement('script')
+            if (oldScript.src) {
+              newScript.src = oldScript.src
+            } else {
+              newScript.textContent = oldScript.textContent
+            }
+            document.body.appendChild(newScript)
+          })
+        })
+    } catch (error) {
+      console.error('error:', error)
     }
-    #container {
-      max-width: 900px;
-      margin: 30px auto;
-      padding: 20px;
-      background: #ccd url("./assets/backblue.gif") no-repeat top right;
-      border: 2px solid #000;
-    }
-    h1 { text-align: center; }
-    a { color: #00f; text-decoration: underline; font-weight: bold; }
-    a:hover { color: #c00; }
-  </style>
-</head>
-<body>
-  <div id="container">
-    <h1>Deltarune Web Port</h1>
-    <p>
-      <a href="./game.html">Click here to launch the game</a>
-    </p>
-  </div>
-
-  <!-- Local scripts -->
-  <script src="./js/game.js"></script>
-  <script src="./js/input.js"></script>
-  <script src="./js/other-scripts.js"></script>
-
-</body>
-</html>
+  }
+</script>
