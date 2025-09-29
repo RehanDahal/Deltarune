@@ -1,53 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Deltarune Web Port</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: #77b;
-      font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
-      text-align: center;
-    }
-    #container {
-      margin: 30px auto;
-      padding: 20px;
-      background: #ccd url('backblue.gif') no-repeat top right;
-      border: 2px solid #000;
-      max-width: 900px;
-    }
-    a {
-      font-weight: bold;
-      color: #00f;
-      text-decoration: underline;
-    }
-    a:hover { color: #c00; }
-    .menu a { display: block; margin: 10px 0; }
-    button { margin-top: 10px; font-size: 1.2em; }
-  </style>
+<meta charset="UTF-8">
+<title>Deltarune Web Port</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 
-<div id="container">
-  <h1>Deltarune Web Port</h1>
-
-  <!-- Audio & Mute button -->
-  <audio id="drone" controls loop autoplay hidden>
-    <source src="audios/AUDIO_DRONE.ogg" type="audio/ogg">
-  </audio>
-  <button id="mute">🔊</button>
-
-  <!-- Menu -->
-  <div class="menu">
-    <a href="#" id="startGame">Play Game</a>
-  </div>
-
-  <!-- Game container -->
-  <div id="gameContainer"></div>
+<!-- Original Menu & Chapters HTML here -->
+<div class="menu">
+  <a href="javascript:loadChapter(1)" class="row">
+    <span class="chapter">Chapter 1</span>
+    <span class="title">The Beginning</span>
+    <img src="icons/1.png">
+  </a>
+  <a href="javascript:loadChapter(2)" class="row">
+    <span class="chapter">Chapter 2</span>
+    <span class="title">A Cyber's World</span>
+    <img src="icons/2.png">
+  </a>
+  <a href="javascript:loadChapter(3)" class="row">
+    <span class="chapter">Chapter 3</span>
+    <span class="title">Late Night</span>
+    <img src="icons/3.png">
+  </a>
+  <a href="javascript:loadChapter(4)" class="row">
+    <span class="chapter">Chapter 4</span>
+    <span class="title">Prophecy</span>
+    <img src="icons/4.png">
+  </a>
+  <!-- Disabled Chapters -->
+  <a href="javascript:alert('Chapter 5 coming soon!')" class="disabled-row">
+    <span class="chapter">Chapter 5</span>
+    <span class="disabled-title">--</span>
+    <img src="icons/0.png">
+  </a>
+  <a href="javascript:alert('Chapter 6 coming soon!')" class="disabled-row">
+    <span class="chapter">Chapter 6</span>
+    <span class="disabled-title">--</span>
+    <img src="icons/0.png">
+  </a>
+  <a href="javascript:alert('Chapter 7 coming soon!')" class="disabled-row">
+    <span class="chapter">Chapter 7</span>
+    <span class="disabled-title">--</span>
+    <img src="icons/0.png">
+  </a>
 </div>
+
+<!-- Background Music -->
+<audio id="drone" controls loop autoplay hidden>
+  <source src="audios/AUDIO_DRONE.ogg" type="audio/ogg">
+</audio>
+<button id="mute">🔊</button>
 
 <script>
 const audio = document.getElementById('drone');
@@ -60,29 +64,22 @@ mute.addEventListener('click', () => {
   mute.textContent = audio.muted ? '🔊' : '🔇';
 });
 
-// Load the game dynamically into #gameContainer
-document.getElementById('startGame').addEventListener('click', function(e) {
-  e.preventDefault();
-  if (!gamestarted) {
+// Keep the original chapter loading functionality
+function loadChapter(chapter) {
+  fetch(`chapter${chapter}/index.html`).then(res => res.text()).then(html => {
     gamestarted = true;
-    fetch('deltarune.html?t=' + Date.now())
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById('gameContainer').innerHTML = html;
-
-        // Re-run any scripts inside the fetched game
-        document.getElementById('gameContainer').querySelectorAll('script').forEach(oldScript => {
-          const newScript = document.createElement('script');
-          if (oldScript.src) {
-            newScript.src = oldScript.src;
-          } else {
-            newScript.textContent = oldScript.textContent;
-          }
-          document.body.appendChild(newScript);
-        });
-      });
-  }
-});
+    document.documentElement.innerHTML = html;
+    document.documentElement.querySelectorAll('script').forEach(oldScript => {
+      const newScript = document.createElement('script');
+      if (oldScript.src) {
+        newScript.src = oldScript.src;
+      } else {
+        newScript.textContent = oldScript.textContent;
+      }
+      document.body.appendChild(newScript);
+    });
+  });
+}
 </script>
 
 </body>
