@@ -10,29 +10,26 @@ function launch() {
       .then((html) => {
         document.documentElement.innerHTML = html
 
-        // --- Add chapter selection menu sounds ONLY ---
-        const menumoveaudio = document.createElement('audio')
-        menumoveaudio.src = 'audios/snd_menumove.mp3'
-        menumoveaudio.id = 'menumoveaudio'
-        menumoveaudio.preload = 'auto'
-        document.body.appendChild(menumoveaudio)
+        // Wait a tick to ensure elements exist
+        setTimeout(() => {
+          // Add menu sounds
+          const menumoveaudio = new Audio('audios/snd_menumove.mp3')
+          menumoveaudio.preload = 'auto'
+          const menuselectaudio = new Audio('audios/snd_select.mp3')
+          menuselectaudio.preload = 'auto'
 
-        const menuselectaudio = document.createElement('audio')
-        menuselectaudio.src = 'audios/snd_select.mp3'
-        menuselectaudio.id = 'menuselectaudio'
-        menuselectaudio.preload = 'auto'
-        document.body.appendChild(menuselectaudio)
+          document.querySelectorAll('.row').forEach(row => {
+            row.addEventListener('mouseenter', () => {
+              menumoveaudio.currentTime = 0
+              menumoveaudio.play()
+            })
+            row.addEventListener('click', () => {
+              menuselectaudio.currentTime = 0
+              menuselectaudio.play()
+            })
+          })
+        }, 50)
 
-        document.querySelectorAll('.row').forEach(row => {
-          row.addEventListener('mouseenter', () => {
-            if (menumoveaudio) menumoveaudio.play()
-          })
-          row.addEventListener('click', () => {
-            if (menuselectaudio) menuselectaudio.play()
-          })
-        })
-        // --- End sounds ---
-        
         // Re-add scripts from fetched HTML exactly as before
         document.documentElement.querySelectorAll('script').forEach((oldScript) => {
           const newScript = document.createElement('script')
