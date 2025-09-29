@@ -1,25 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Deltarune Launcher</title>
+<style>
+  body { margin:0; font-family: Arial; background:#77b; text-align:center; }
+  #gameContainer { margin-top:20px; }
+</style>
+</head>
+<body>
+
+<h1>Deltarune Web Port</h1>
+
+<a href="#" id="startGame">Play Game</a>
+
+<audio id="drone" controls loop autoplay hidden>
+  <source src="audios/AUDIO_DRONE.ogg" type="audio/ogg">
+</audio>
+<button id="mute">🔊</button>
+
+<div id="gameContainer"></div>
+
 <script>
-  launch()
+const audio = document.getElementById('drone');
+const mute = document.getElementById('mute');
+let gamestarted = false;
 
-  function launch() {
-    try {
-      fetch('deltarune.html?t=' + Date.now())
-        .then((response) => response.text())
-        .then((html) => {
-          document.documentElement.innerHTML = html
+mute.addEventListener('click', () => {
+  audio.muted = !audio.muted;
+  mute.textContent = audio.muted ? '🔊' : '🔇';
+});
 
-          document.documentElement.querySelectorAll('script').forEach((oldScript) => {
-            const newScript = document.createElement('script')
-            if (oldScript.src) {
-              newScript.src = oldScript.src
-            } else {
-              newScript.textContent = oldScript.textContent
-            }
-            document.body.appendChild(newScript)
-          })
-        })
-    } catch (error) {
-      console.error('error:', error)
-    }
+document.getElementById('startGame').addEventListener('click', function(e) {
+  e.preventDefault();
+  if (!gamestarted) {
+    gamestarted = true;
+    fetch('deltarune.html?t=' + Date.now())
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('gameContainer').innerHTML = html;
+
+        document.getElementById('gameContainer').querySelectorAll('script').forEach(oldScript => {
+          const newScript = document.createElement('script');
+          if (oldScript.src) {
+            newScript.src = oldScript.src;
+          } else {
+            newScript.textContent = oldScript.textContent;
+          }
+          document.body.appendChild(newScript);
+        });
+      });
   }
+});
 </script>
+
+</body>
+</html>
