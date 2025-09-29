@@ -3,46 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Deltarune Launcher</title>
-  <style>
-    body { font-family: Arial, sans-serif; text-align: center; padding-top: 50px; background: #77b; color: #fff; }
-    a { font-weight: bold; color: #00f; text-decoration: underline; }
-    a:hover { color: #c00; }
-  </style>
 </head>
 <body>
   <h1>Deltarune Web Port</h1>
-  <p>
-    <a href="deltaruneindex.html" id="playGame">Play Game</a>
-  </p>
-
-  <script>
-    const playLink = document.getElementById('playGame');
-
-    // Intercept click to ensure sounds start properly
-    playLink.addEventListener('click', function(e) {
-      e.preventDefault();
-
-      // Open the game page
-      const gameWindow = window.open('deltaruneindex.html', '_blank');
-
-      // Poll until the page is fully loaded
-      const interval = setInterval(() => {
-        if (!gameWindow || gameWindow.closed) {
-          clearInterval(interval);
-          return;
-        }
-        try {
-          // Try to access the game's audio element
-          const audio = gameWindow.document.getElementById('drone');
-          if (audio) {
-            audio.play().catch(err => console.log('Autoplay blocked'));
-            clearInterval(interval);
-          }
-        } catch(err) {
-          // Cross-origin issues if ever moved off GitHub Pages; ignore
-        }
-      }, 100);
-    });
-  </script>
+  <a href="./deltaruneindex.html">Play Game</a>
 </body>
 </html>
