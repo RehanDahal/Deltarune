@@ -4,30 +4,11 @@ launch()
 function launch() {
   try {
     fetch(
-      'deltarune.html?t=' + Date.now() // points to your local deltarune.html
+      'deltarune.html?t=' + Date.now()  // points to your deltarune.html
     )
       .then((response) => response.text())
       .then((html) => {
         document.documentElement.innerHTML = html
-
-        // Add main menu sounds
-        const drone = document.createElement('audio')
-        drone.id = 'drone'
-        drone.src = 'audios/AUDIO_DRONE.ogg'
-        drone.loop = true
-        drone.autoplay = true
-        drone.hidden = true
-        document.body.appendChild(drone)
-
-        const muteBtn = document.createElement('button')
-        muteBtn.id = 'mute'
-        muteBtn.textContent = '🔊'
-        document.body.appendChild(muteBtn)
-
-        muteBtn.addEventListener('click', () => {
-          drone.muted = !drone.muted
-          muteBtn.textContent = drone.muted ? '🔊' : '🔇'
-        })
 
         // Re-add scripts from fetched HTML
         document.documentElement.querySelectorAll('script').forEach((oldScript) => {
@@ -38,6 +19,25 @@ function launch() {
             newScript.textContent = oldScript.textContent
           }
           document.body.appendChild(newScript)
+        })
+
+        // Add main menu sounds ONLY
+        const audio = document.createElement('audio')
+        audio.id = 'drone'
+        audio.src = 'audios/AUDIO_DRONE.ogg'
+        audio.loop = true
+        audio.autoplay = true
+        audio.hidden = true
+        document.body.appendChild(audio)
+
+        const mute = document.createElement('button')
+        mute.id = 'mute'
+        mute.textContent = '🔊'
+        document.body.appendChild(mute)
+
+        mute.addEventListener('click', () => {
+          audio.muted = !audio.muted
+          mute.textContent = audio.muted ? '🔊' : '🔇'
         })
       })
   } catch (error) {
