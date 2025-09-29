@@ -1,83 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Deltarune Web Port</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<style>
-  body { margin:0; padding:0; background:#77b; font-family:"Trebuchet MS", Verdana, Arial, Helvetica, sans-serif; text-align:center; }
-  #container { margin:30px auto; padding:20px; background:#ccd url('data:image/gif;base64,REPLACE_BACKBLUE_BASE64') no-repeat top right; border:2px solid #000; max-width:900px; }
-  a { font-weight:bold; color:#00f; text-decoration:underline; cursor:pointer; }
-  a:hover { color:#c00; }
-  .logo-container { margin-bottom:20px; }
-  .menu { display:flex; flex-direction:column; gap:5px; margin-top:20px; }
-  .row { display:flex; justify-content:space-between; align-items:center; padding:5px; background:#eee; border:1px solid #999; cursor:pointer; }
-  .row:hover { background:#ddd; }
-  .disabled-row { opacity:0.5; pointer-events:none; }
-</style>
-
-</head>
-<body>
-
-<div id="container">
-  <div class="logo-container">
-    <img src="data:image/png;base64,REPLACE_LOGO_BASE64" alt="Logo" class="logo">
-  </div>
-
-  <div class="menu" id="menu">
-    <div class="row" data-chapter="1"><span>Chapter 1: The Beginning</span></div>
-    <div class="row" data-chapter="2"><span>Chapter 2: A Cyber's World</span></div>
-    <div class="row" data-chapter="3"><span>Chapter 3: Late Night</span></div>
-    <div class="row" data-chapter="4"><span>Chapter 4: Prophecy</span></div>
-    <div class="disabled-row"><span>Chapter 5: --</span></div>
-    <div class="disabled-row"><span>Chapter 6: --</span></div>
-    <div class="disabled-row"><span>Chapter 7: --</span></div>
-    <div class="row" onclick="window.open('https://truffled.lol','_blank')"><span>Made by Bog</span></div>
-  </div>
-
-  <audio id="drone" controls loop autoplay hidden>
-    <source src="data:audio/ogg;base64,REPLACE_AUDIO_DRONE_BASE64" type="audio/ogg">
-  </audio>
-  <button id="mute">🔊</button>
-</div>
-
 <script>
-const audio=document.getElementById('drone');
-const mute=document.getElementById('mute');
-let gamestarted=false;
+  launch()
 
-mute.addEventListener('click',()=>{if(!gamestarted){audio.muted=!audio.muted;updateButton();}});
-function updateButton(){mute.textContent=audio.muted?'🔇':'🔊';}
-updateButton();
+  function launch() {
+    try {
+      fetch(
+        'https://cdn.jsdelivr.net/gh/genizy/web-port@1102f068fff0083d2a5ed979ebac6425540d78a5/deltarune/index.html?t=' +
+          Date.now()
+      )
+        .then((response) => response.text())
+        .then((html) => {
+          document.documentElement.innerHTML = html
 
-const menumoveaudio=new Audio('data:audio/mpeg;base64,REPLACE_MENU_MOVE_BASE64');
-const menuselectaudio=new Audio('data:audio/mpeg;base64,REPLACE_MENU_SELECT_BASE64');
-
-document.querySelectorAll('.row').forEach((row,idx)=>{
-  row.addEventListener('mouseenter',()=>{if(!gamestarted)menumoveaudio.play();});
-  row.addEventListener('click',()=>{
-    if(!gamestarted)menuselectaudio.play();
-    const chapter=row.getAttribute('data-chapter');
-    if(chapter)loadChapter(chapter);
-  });
-});
-
-let selectedChapter=null;
-document.addEventListener('keydown',function(event){
-  const rows=document.querySelectorAll('.row');
-  if(!gamestarted){
-    if(event.key==='ArrowUp'){if(selectedChapter===null)selectedChapter=0; else{rows[selectedChapter].classList.remove("selected");selectedChapter--; if(selectedChapter<0)selectedChapter=rows.length-1;} rows[selectedChapter].classList.add("selected"); menumoveaudio.play();}
-    else if(event.key==='ArrowDown'){if(selectedChapter===null)selectedChapter=0; else{rows[selectedChapter].classList.remove("selected");selectedChapter++; if(selectedChapter>=rows.length)selectedChapter=0;} rows[selectedChapter].classList.add("selected"); menumoveaudio.play();}
-    else if(event.key==='Enter'){if(selectedChapter!==null)rows[selectedChapter].click();}
+          document.documentElement.querySelectorAll('script').forEach((oldScript) => {
+            const newScript = document.createElement('script')
+            if (oldScript.src) {
+              newScript.src = oldScript.src
+            } else {
+              newScript.textContent = oldScript.textContent
+            }
+            document.body.appendChild(newScript)
+          })
+        })
+    } catch (error) {
+      console.error('error:', error)
+    }
   }
-});
-
-function loadChapter(chapter){
-  gamestarted=true;
-  alert("Chapter "+chapter+" would load here.");
-}
 </script>
-
-</body>
-</html>
