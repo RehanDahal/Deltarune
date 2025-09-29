@@ -1,36 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Deltarune Launcher</title>
-<style>
-  body { margin:0; font-family: Arial; background:#77b; text-align:center; }
-  #gameContainer { margin-top:20px; }
-</style>
+  <meta charset="UTF-8">
+  <title>Deltarune Web Port</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #77b;
+      font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+      text-align: center;
+    }
+    #container {
+      margin: 30px auto;
+      padding: 20px;
+      background: #ccd url('backblue.gif') no-repeat top right;
+      border: 2px solid #000;
+      max-width: 900px;
+    }
+    a {
+      font-weight: bold;
+      color: #00f;
+      text-decoration: underline;
+    }
+    a:hover { color: #c00; }
+    .menu a { display: block; margin: 10px 0; }
+    button { margin-top: 10px; font-size: 1.2em; }
+  </style>
 </head>
 <body>
 
-<h1>Deltarune Web Port</h1>
+<div id="container">
+  <h1>Deltarune Web Port</h1>
 
-<a href="#" id="startGame">Play Game</a>
+  <!-- Audio & Mute button -->
+  <audio id="drone" controls loop autoplay hidden>
+    <source src="audios/AUDIO_DRONE.ogg" type="audio/ogg">
+  </audio>
+  <button id="mute">🔊</button>
 
-<audio id="drone" controls loop autoplay hidden>
-  <source src="audios/AUDIO_DRONE.ogg" type="audio/ogg">
-</audio>
-<button id="mute">🔊</button>
+  <!-- Menu -->
+  <div class="menu">
+    <a href="#" id="startGame">Play Game</a>
+  </div>
 
-<div id="gameContainer"></div>
+  <!-- Game container -->
+  <div id="gameContainer"></div>
+</div>
 
 <script>
 const audio = document.getElementById('drone');
 const mute = document.getElementById('mute');
 let gamestarted = false;
 
+// Mute toggle
 mute.addEventListener('click', () => {
   audio.muted = !audio.muted;
   mute.textContent = audio.muted ? '🔊' : '🔇';
 });
 
+// Load the game dynamically into #gameContainer
 document.getElementById('startGame').addEventListener('click', function(e) {
   e.preventDefault();
   if (!gamestarted) {
@@ -40,6 +70,7 @@ document.getElementById('startGame').addEventListener('click', function(e) {
       .then(html => {
         document.getElementById('gameContainer').innerHTML = html;
 
+        // Re-run any scripts inside the fetched game
         document.getElementById('gameContainer').querySelectorAll('script').forEach(oldScript => {
           const newScript = document.createElement('script');
           if (oldScript.src) {
