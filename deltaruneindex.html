@@ -10,25 +10,29 @@ function launch() {
       .then((html) => {
         document.documentElement.innerHTML = html
 
-        // Add main menu sound only
-        const audio = document.createElement('audio')
-        audio.id = 'drone'
-        audio.src = 'audios/AUDIO_DRONE.ogg'
-        audio.loop = true
-        audio.autoplay = true
-        audio.hidden = true
-        document.body.appendChild(audio)
+        // --- Add chapter selection menu sounds ONLY ---
+        const menumoveaudio = document.createElement('audio')
+        menumoveaudio.src = 'audios/snd_menumove.mp3'
+        menumoveaudio.id = 'menumoveaudio'
+        menumoveaudio.preload = 'auto'
+        document.body.appendChild(menumoveaudio)
 
-        const muteBtn = document.createElement('button')
-        muteBtn.id = 'mute'
-        muteBtn.textContent = '🔊'
-        document.body.appendChild(muteBtn)
+        const menuselectaudio = document.createElement('audio')
+        menuselectaudio.src = 'audios/snd_select.mp3'
+        menuselectaudio.id = 'menuselectaudio'
+        menuselectaudio.preload = 'auto'
+        document.body.appendChild(menuselectaudio)
 
-        muteBtn.addEventListener('click', () => {
-          audio.muted = !audio.muted
-          muteBtn.textContent = audio.muted ? '🔊' : '🔇'
+        document.querySelectorAll('.row').forEach(row => {
+          row.addEventListener('mouseenter', () => {
+            if (menumoveaudio) menumoveaudio.play()
+          })
+          row.addEventListener('click', () => {
+            if (menuselectaudio) menuselectaudio.play()
+          })
         })
-
+        // --- End sounds ---
+        
         // Re-add scripts from fetched HTML exactly as before
         document.documentElement.querySelectorAll('script').forEach((oldScript) => {
           const newScript = document.createElement('script')
