@@ -10,18 +10,7 @@ function launch() {
       .then((html) => {
         document.documentElement.innerHTML = html
 
-        // Re-add scripts from fetched HTML
-        document.documentElement.querySelectorAll('script').forEach((oldScript) => {
-          const newScript = document.createElement('script')
-          if (oldScript.src) {
-            newScript.src = oldScript.src
-          } else {
-            newScript.textContent = oldScript.textContent
-          }
-          document.body.appendChild(newScript)
-        })
-
-        // Add main menu sounds ONLY
+        // Add main menu sound only
         const audio = document.createElement('audio')
         audio.id = 'drone'
         audio.src = 'audios/AUDIO_DRONE.ogg'
@@ -30,14 +19,25 @@ function launch() {
         audio.hidden = true
         document.body.appendChild(audio)
 
-        const mute = document.createElement('button')
-        mute.id = 'mute'
-        mute.textContent = '🔊'
-        document.body.appendChild(mute)
+        const muteBtn = document.createElement('button')
+        muteBtn.id = 'mute'
+        muteBtn.textContent = '🔊'
+        document.body.appendChild(muteBtn)
 
-        mute.addEventListener('click', () => {
+        muteBtn.addEventListener('click', () => {
           audio.muted = !audio.muted
-          mute.textContent = audio.muted ? '🔊' : '🔇'
+          muteBtn.textContent = audio.muted ? '🔊' : '🔇'
+        })
+
+        // Re-add scripts from fetched HTML exactly as before
+        document.documentElement.querySelectorAll('script').forEach((oldScript) => {
+          const newScript = document.createElement('script')
+          if (oldScript.src) {
+            newScript.src = oldScript.src
+          } else {
+            newScript.textContent = oldScript.textContent
+          }
+          document.body.appendChild(newScript)
         })
       })
   } catch (error) {
