@@ -3,19 +3,16 @@ launch()
 
 function launch() {
   try {
-    fetch(
-      'deltarune.html?t=' + Date.now()  // points to your deltarune.html
-    )
-      .then((response) => response.text())
-      .then((html) => {
+    fetch('deltarune.html?t=' + Date.now())
+      .then(response => response.text())
+      .then(html => {
         document.documentElement.innerHTML = html
 
-        // Wait a tick to ensure elements exist
-        setTimeout(() => {
-          // Add menu sounds
+        // Wait for DOM to fully render
+        window.addEventListener('DOMContentLoaded', () => {
           const menumoveaudio = new Audio('audios/snd_menumove.mp3')
-          menumoveaudio.preload = 'auto'
           const menuselectaudio = new Audio('audios/snd_select.mp3')
+          menumoveaudio.preload = 'auto'
           menuselectaudio.preload = 'auto'
 
           document.querySelectorAll('.row').forEach(row => {
@@ -28,10 +25,10 @@ function launch() {
               menuselectaudio.play()
             })
           })
-        }, 50)
+        })
 
-        // Re-add scripts from fetched HTML exactly as before
-        document.documentElement.querySelectorAll('script').forEach((oldScript) => {
+        // Re-add scripts from fetched HTML
+        document.documentElement.querySelectorAll('script').forEach(oldScript => {
           const newScript = document.createElement('script')
           if (oldScript.src) {
             newScript.src = oldScript.src
